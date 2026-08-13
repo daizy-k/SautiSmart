@@ -1,0 +1,20 @@
+{
+  "name": "sautismart-web",
+  "version": "1.0.0",
+  "description": "SautiSmart - an interactive digital archive and practice platform for music education under the Kenyan Competency-Based Curriculum (CBC).",
+  "private": true,
+  "scripts": {
+    "install:server": "npm install --prefix server",
+    "install:client": "npm install --prefix client",
+    "install:all": "npm run install:server && npm run install:client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build:client": "npm run build --prefix client",
+    "start:server": "npm run start --prefix server",
+    "start:client": "npm run start --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
