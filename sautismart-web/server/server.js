@@ -8,6 +8,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 // Import REST API route modules
+const authRoutes = require('./routes/authRoutes');
 const archiveRoutes = require('./routes/archiveRoutes');
 const setPieceRoutes = require('./routes/setPieceRoutes');
 const theoryRoutes = require('./routes/theoryRoutes');
@@ -35,6 +36,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Register API Domain Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/archive', archiveRoutes);
 app.use('/api/setpieces', setPieceRoutes);
 app.use('/api/theory', theoryRoutes);

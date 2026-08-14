@@ -1,17 +1,29 @@
 import { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import ArchiveCard from '../../components/ArchiveCard';
+import { useAuth } from '../../context/AuthContext';
 
 // Resolve backend API URL from environment variable (NEXT_PUBLIC_API_URL configured in client/.env.local)
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function ArchivePage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
   // Local state for fetched archive items, loading indicators, errors, and filters
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tribeFilter, setTribeFilter] = useState('All');
   const [occasionFilter, setOccasionFilter] = useState('All');
+
+  // Route Protection: Redirect unauthenticated users to /login
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
 
   // Fetch cultural archive items from the Express backend API on component mount
   useEffect(() => {
@@ -38,11 +50,13 @@ export default function ArchivePage() {
         }
       }
     }
-    fetchArchive();
+    if (user) {
+      fetchArchive();
+    }
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user]);
 
   // Compute unique list of tribes dynamically from the loaded items
   const tribes = useMemo(() => {
@@ -60,6 +74,16 @@ export default function ArchivePage() {
     const matchesOccasion = occasionFilter === 'All' || item.culturalOccasion === occasionFilter;
     return matchesTribe && matchesOccasion;
   });
+
+  if (authLoading || !user) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border" style={{ color: '#0F7173' }} role="status">
+          <span className="visually-hidden">Checking access...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

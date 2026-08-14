@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../components/Navbar';
+import { AuthProvider } from '../context/AuthContext';
 
 /**
  * Custom Next.js App Component (_app.js)
  * Wraps all pages to inject global Bootstrap styles, global navigation layout,
- * and the SautiSmart custom color palette & design tokens.
+ * AuthProvider context, and the SautiSmart custom color palette & design tokens.
  */
 function SautiSmartApp({ Component, pageProps }) {
   // Dynamically load Bootstrap JavaScript components (modals, dropdowns, collapsibles) on client side
@@ -14,7 +15,7 @@ function SautiSmartApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <>
+    <AuthProvider>
       {/* Shared Header Navigation across all pages */}
       <Navbar />
       <main className="ss-main">
@@ -110,7 +111,7 @@ function SautiSmartApp({ Component, pageProps }) {
           accent-color: var(--ss-emerald);
         }
       `}</style>
-    </>
+    </AuthProvider>
   );
 }
 

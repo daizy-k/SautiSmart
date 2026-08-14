@@ -2,9 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 const TheoryModule = require('../models/TheoryModule');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 // @route   GET /api/theory
-// @desc    List theory modules, optionally filtered by grade level or strand
+// @desc    List theory modules, optionally filtered by grade level or strand (Public)
 router.get('/', async (req, res) => {
   try {
     const { gradeLevel, strand } = req.query;
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route   GET /api/theory/grade/:gradeLevel
-// @desc    List theory modules for a single grade level, in lesson order
+// @desc    List theory modules for a single grade level (Public)
 router.get('/grade/:gradeLevel', async (req, res) => {
   try {
     const modules = await TheoryModule.find({ gradeLevel: req.params.gradeLevel }).sort({ order: 1 });
@@ -31,6 +32,7 @@ router.get('/grade/:gradeLevel', async (req, res) => {
 });
 
 // @route   GET /api/theory/:id
+// @desc    Get a single theory module by ID (Public)
 router.get('/:id', async (req, res) => {
   try {
     const theoryModule = await TheoryModule.findById(req.params.id);
@@ -44,7 +46,8 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route   POST /api/theory
-router.post('/', async (req, res) => {
+// @desc    Create a new theory module (Protected - Admin Only)
+router.post('/', protect, adminOnly, async (req, res) => {
   try {
     const newModule = await TheoryModule.create(req.body);
     res.status(201).json({ success: true, data: newModule });
@@ -54,7 +57,8 @@ router.post('/', async (req, res) => {
 });
 
 // @route   PUT /api/theory/:id
-router.put('/:id', async (req, res) => {
+// @desc    Update a theory module (Protected - Admin Only)
+router.put('/:id', protect, adminOnly, async (req, res) => {
   try {
     req.body.updatedAt = Date.now();
     const updatedModule = await TheoryModule.findByIdAndUpdate(req.params.id, req.body, {
@@ -71,7 +75,8 @@ router.put('/:id', async (req, res) => {
 });
 
 // @route   DELETE /api/theory/:id
-router.delete('/:id', async (req, res) => {
+// @desc    Delete a theory module (Protected - Admin Only)
+router.delete('/:id', protect, adminOnly, async (req, res) => {
   try {
     const deletedModule = await TheoryModule.findByIdAndDelete(req.params.id);
     if (!deletedModule) {

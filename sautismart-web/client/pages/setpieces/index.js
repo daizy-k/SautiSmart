@@ -1,15 +1,27 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import AudioPlayer from '../../components/AudioPlayer';
+import { useAuth } from '../../context/AuthContext';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function SetPiecesPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
   const [setPieces, setSetPieces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activePieceId, setActivePieceId] = useState(null);
   const [gradeFilter, setGradeFilter] = useState('All');
+
+  // Route Protection: Redirect unauthenticated users to /login
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     let isMounted = true;
@@ -39,11 +51,14 @@ export default function SetPiecesPage() {
         }
       }
     }
-    fetchSetPieces();
+
+    if (user) {
+      fetchSetPieces();
+    }
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user]);
 
   const grades = ['All', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9'];
 
@@ -52,6 +67,16 @@ export default function SetPiecesPage() {
   );
 
   const activePiece = setPieces.find((piece) => piece._id === activePieceId) || null;
+
+  if (authLoading || !user) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border" style={{ color: '#0F7173' }} role="status">
+          <span className="visually-hidden">Checking access...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

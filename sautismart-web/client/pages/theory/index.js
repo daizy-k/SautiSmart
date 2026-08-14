@@ -1,14 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useAuth } from '../../context/AuthContext';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 const GRADE_ORDER = ['Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9'];
 
 export default function TheoryPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeGrade, setActiveGrade] = useState('Grade 4');
+
+  // Route Protection: Redirect unauthenticated users to /login
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     let isMounted = true;
@@ -34,11 +46,13 @@ export default function TheoryPage() {
         }
       }
     }
-    fetchModules();
+    if (user) {
+      fetchModules();
+    }
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user]);
 
   const modulesByGrade = useMemo(() => {
     const grouped = {};
@@ -61,6 +75,16 @@ export default function TheoryPage() {
     () => GRADE_ORDER.filter((grade) => modulesByGrade[grade] && modulesByGrade[grade].length > 0),
     [modulesByGrade]
   );
+
+  if (authLoading || !user) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border" style={{ color: '#0F7173' }} role="status">
+          <span className="visually-hidden">Checking access...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

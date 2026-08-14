@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <>
       <Head>
@@ -19,7 +22,7 @@ export default function Home() {
                 className="badge rounded-pill mb-3 px-3 py-2"
                 style={{ backgroundColor: '#E59F71', color: '#0C0C0C' }}
               >
-                Grades 4 &ndash; 9 &middot; CBC Aligned
+                Music Learning App for CBC Students
               </span>
               <h1 className="display-4 fw-bold mb-3">Learn, Practice, and Preserve Kenyan Music.</h1>
               <p className="lead mb-4">
@@ -28,18 +31,39 @@ export default function Home() {
                 cultural archive of Kenyan folk songs and instruments, and set-piece practice
                 tools that slow down without losing pitch.
               </p>
-              <div className="d-flex flex-wrap gap-3">
-                <Link
-                  href="/setpieces"
-                  className="btn btn-lg fw-semibold"
-                  style={{ backgroundColor: '#69DC9E', color: '#0C0C0C' }}
-                >
-                  Practice a Set Piece
-                </Link>
-                <Link href="/archive" className="btn btn-lg btn-outline-light fw-semibold">
-                  Explore the Cultural Archive
-                </Link>
-              </div>
+
+              {user ? (
+                <div className="d-flex flex-wrap gap-3 align-items-center">
+                  <Link
+                    href="/setpieces"
+                    className="btn btn-lg fw-semibold"
+                    style={{ backgroundColor: '#69DC9E', color: '#0C0C0C' }}
+                  >
+                    Practice a Set Piece
+                  </Link>
+                  <Link href="/archive" className="btn btn-lg btn-outline-light fw-semibold">
+                    Explore the Cultural Archive
+                  </Link>
+                  {user.role === 'admin' && (
+                    <Link href="/admin/dashboard" className="btn btn-lg fw-bold" style={{ backgroundColor: '#E59F71', color: '#0C0C0C' }}>
+                      ⚡ Admin Dashboard
+                    </Link>
+                  )}
+                </div>
+              ) : (
+                <div className="d-flex flex-wrap gap-3">
+                  <Link
+                    href="/login"
+                    className="btn btn-lg fw-bold px-4"
+                    style={{ backgroundColor: '#69DC9E', color: '#0C0C0C' }}
+                  >
+                    Log In / Sign Up to Access
+                  </Link>
+                  <Link href="/login" className="btn btn-lg btn-outline-light fw-semibold">
+                    Explore Syllabus Tools
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
