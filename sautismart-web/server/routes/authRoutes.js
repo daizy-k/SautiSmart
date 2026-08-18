@@ -115,6 +115,8 @@ router.get('/me', protect, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
+});
+
 // @route   PUT /api/auth/promote
 // @desc    Promote a registered student account to admin role
 router.put('/promote', async (req, res) => {
