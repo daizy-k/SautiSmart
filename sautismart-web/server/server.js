@@ -1,6 +1,7 @@
 // Load environment variables from server/.env file into process.env
 require('dotenv').config();
 
+// SautiSmart Express Server Root
 const express = require('express');
 const cors = require('cors');
 

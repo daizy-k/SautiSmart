@@ -4,6 +4,33 @@ const router = express.Router();
 const SetPiece = require('../models/SetPiece');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 
+// @route   GET /api/setpieces/proxy-audio
+// @desc    Proxy external audio files to bypass browser CORS restrictions (Public)
+router.get('/proxy-audio', async (req, res) => {
+  try {
+    const { url } = req.query;
+    if (!url) {
+      return res.status(400).json({ success: false, message: 'URL query parameter is required' });
+    }
+
+    const audioRes = await fetch(url);
+    if (!audioRes.ok) {
+      return res
+        .status(audioRes.status)
+        .json({ success: false, message: `Remote audio fetch failed with status ${audioRes.status}` });
+    }
+
+    const contentType = audioRes.headers.get('content-type') || 'audio/mpeg';
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const arrayBuffer = await audioRes.arrayBuffer();
+    res.send(Buffer.from(arrayBuffer));
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // @route   GET /api/setpieces
 // @desc    List set pieces, optionally filtered by grade level, exam year, or category (Public)
 router.get('/', async (req, res) => {

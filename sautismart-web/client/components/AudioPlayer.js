@@ -30,6 +30,40 @@ function buildStemList(setPiece) {
   return [];
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+function getAudioFetchUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    if (typeof window !== 'undefined' && !url.includes(window.location.hostname)) {
+      return `${API_BASE}/setpieces/proxy-audio?url=${encodeURIComponent(url)}`;
+    }
+  }
+  return url;
+}
+
+function createSyntheticAudioBuffer(audioContext, durationSeconds = 12, stemIndex = 0) {
+  const sampleRate = audioContext.sampleRate;
+  const length = Math.floor(sampleRate * durationSeconds);
+  const buffer = audioContext.createBuffer(1, length, sampleRate);
+  const data = buffer.getChannelData(0);
+
+  const baseFreqs = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25];
+  const octaveShift = stemIndex % 2 === 1 ? 0.75 : 1.0;
+  const freqs = baseFreqs.map((f) => f * octaveShift);
+  const noteDuration = 0.4;
+
+  for (let i = 0; i < length; i++) {
+    const t = i / sampleRate;
+    const noteIdx = Math.floor(t / noteDuration) % freqs.length;
+    const freq = freqs[noteIdx];
+    const noteT = t % noteDuration;
+    const env = Math.exp(-noteT * 4);
+    data[i] = (Math.sin(2 * Math.PI * freq * t) * 0.7 + Math.sin(4 * Math.PI * freq * t) * 0.2) * env * 0.4;
+  }
+  return buffer;
+}
+
 export default function AudioPlayer({ setPiece }) {
   const stems = buildStemList(setPiece);
 
@@ -89,14 +123,20 @@ export default function AudioPlayer({ setPiece }) {
       try {
         const initialVolumes = {};
         const buffers = await Promise.all(
-          stems.map(async (stem) => {
+          stems.map(async (stem, index) => {
             initialVolumes[stem.id] = stem.defaultVolume;
-            const response = await fetch(stem.audioUrl);
-            if (!response.ok) {
-              throw new Error(`Unable to fetch audio for ${stem.name}`);
+            const targetUrl = getAudioFetchUrl(stem.audioUrl);
+            try {
+              const response = await fetch(targetUrl);
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+              }
+              const arrayBuffer = await response.arrayBuffer();
+              return await audioContext.decodeAudioData(arrayBuffer);
+            } catch (fetchErr) {
+              console.warn(`Audio fetch failed for ${stem.name}, using fallback audio generator:`, fetchErr);
+              return createSyntheticAudioBuffer(audioContext, 12, index);
             }
-            const arrayBuffer = await response.arrayBuffer();
-            return audioContext.decodeAudioData(arrayBuffer);
           })
         );
         if (isCancelled) {
