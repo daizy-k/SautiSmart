@@ -13,6 +13,7 @@ const authRoutes = require('./routes/authRoutes');
 const archiveRoutes = require('./routes/archiveRoutes');
 const setPieceRoutes = require('./routes/setPieceRoutes');
 const theoryRoutes = require('./routes/theoryRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Establish connection to MongoDB Atlas or local database
 connectDB();
@@ -41,6 +42,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/archive', archiveRoutes);
 app.use('/api/setpieces', setPieceRoutes);
 app.use('/api/theory', theoryRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 Fallback Middleware: Handles requests to unregistered endpoints
 app.use((req, res) => {
