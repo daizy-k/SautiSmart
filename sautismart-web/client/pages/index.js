@@ -46,7 +46,7 @@ export default function Home() {
                   </Link>
                   {user.role === 'admin' && (
                     <Link href="/admin/dashboard" className="btn btn-lg fw-bold" style={{ backgroundColor: '#E59F71', color: '#0C0C0C' }}>
-                      ⚡ Admin Dashboard
+                      Admin Dashboard
                     </Link>
                   )}
                 </div>

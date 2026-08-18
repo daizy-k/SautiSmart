@@ -70,7 +70,7 @@ export default function Navbar() {
                   className="nav-link px-3 fw-semibold"
                   style={router.pathname.startsWith('/admin') ? { color: '#E59F71' } : { color: '#69DC9E' }}
                 >
-                  ⚡ Admin Dashboard
+                  Admin Dashboard
                 </Link>
               </li>
             )}
@@ -97,7 +97,7 @@ export default function Navbar() {
                   style={{ backgroundColor: 'transparent' }}
                   title="Log Out"
                 >
-                  Logout ➔
+                  Logout
                 </button>
               </li>
             ) : (

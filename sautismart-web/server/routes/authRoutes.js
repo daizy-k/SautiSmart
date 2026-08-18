@@ -115,6 +115,42 @@ router.get('/me', protect, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
+// @route   PUT /api/auth/promote
+// @desc    Promote a registered student account to admin role
+router.put('/promote', async (req, res) => {
+  try {
+    const { email, adminSecret } = req.body;
+    const requiredSecret = process.env.ADMIN_SECRET || 'SAUTISMART_ADMIN_2026';
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please provide user email' });
+    }
+
+    if (adminSecret !== requiredSecret) {
+      return res.status(401).json({ success: false, message: 'Invalid admin promotion secret key' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Registered user not found' });
+    }
+
+    user.role = 'admin';
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `User ${user.email} successfully promoted to Admin`,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
 });
 
 module.exports = router;

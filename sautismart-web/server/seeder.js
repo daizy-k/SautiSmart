@@ -1,6 +1,14 @@
 const path = require('path');
+const dns = require('dns');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  dns.setDefaultResultOrder('ipv4first');
+} catch (e) {
+  // Ignore DNS set failures
+}
 
 const SetPiece = require('./models/SetPiece');
 const TheoryModule = require('./models/TheoryModule');
@@ -101,78 +109,106 @@ const theoryModulesData = [
 ];
 
 const archiveItemsData = [
-  // --- CULTURAL SONGS WITH YOUTUBE LINKS ---
+  // --- 10 OFFICIAL CBC CULTURAL FOLK SONGS ---
   {
-    title: 'Mukangala Traditional Wedding Song',
+    title: 'Mulembe Shikamoo (Bridal Welcome)',
     itemType: 'Folk Song',
     tribeOfOrigin: 'Luhya',
-    culturalOccasion: 'Weddings and Celebrations',
-    description: 'Traditional Luhya wedding celebration song performed during nuptial rituals.',
-    culturalSignificance: 'Symbolizes unity and communal blessing for newlyweds.',
-    audioUrl: 'https://www.youtube.com/watch?v=kYv9bH8eYfU',
+    culturalOccasion: 'Wedding',
+    description: 'Traditional Luhya bridal entry song performed during wedding ceremonies.',
+    culturalSignificance: 'Welcomes the newly wed bride into her household with communal blessings.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_wed_1',
+    imageUrl: '/images/instruments/aerophone.png',
   },
   {
-    title: 'Mwana wa Mberi Bridal Dance',
+    title: 'Wathi Wa Muuo (Marriage Blessings)',
     itemType: 'Folk Song',
-    tribeOfOrigin: 'Luhya',
-    culturalOccasion: 'Weddings and Dowry Ceremonies',
-    description: 'Joyous bridal entry song accompanied by rhythmic clapping and ululations.',
-    culturalSignificance: 'Welcomes the firstborn bride into her new household.',
-    audioUrl: 'https://www.youtube.com/watch?v=0hY7bN9jQ6c',
+    tribeOfOrigin: 'Kamba',
+    culturalOccasion: 'Wedding',
+    description: 'Kamba traditional nuptial chant invoking peace, prosperity, and harmony.',
+    culturalSignificance: 'Bestows ancestral matrimonial blessings on the couple.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_wed_2',
+    imageUrl: '/images/instruments/aerophone.png',
   },
   {
-    title: 'Sioyaye (Bukusu Circumcision Anthem)',
-    itemType: 'Folk Song',
-    tribeOfOrigin: 'Luhya (Bukusu)',
-    culturalOccasion: 'Circumcision and Initiation Rites',
-    description: 'Powerful initiation song performed by candidates and warriors during the Khuminyisa ceremony.',
-    culturalSignificance: 'Instills courage, endurance, and cultural pride during the rite of passage.',
-    audioUrl: 'https://www.youtube.com/watch?v=rUjU5jZk5rA',
-  },
-  {
-    title: 'Kutembeya Chinyimba Initiation Dance',
-    itemType: 'Folk Song',
-    tribeOfOrigin: 'Luhya',
-    culturalOccasion: 'Circumcision and Rites of Passage',
-    description: 'Rhythmic processional dance featuring ankle bells (Chinyimba) leading initiates to the river.',
-    culturalSignificance: 'Announces the readiness of young men for adult responsibilities.',
-    audioUrl: 'https://www.youtube.com/watch?v=Vp_gZ8YQfWs',
-  },
-  {
-    title: 'Nyathi Onyi Luo Lullaby & Birth Celebration',
+    title: 'Tero Buru (Chasing the Spirits)',
     itemType: 'Folk Song',
     tribeOfOrigin: 'Luo',
-    culturalOccasion: 'Birth and Child Naming',
-    description: 'Gentle Luo lullaby and welcoming chant sung by grandmothers and mothers.',
-    culturalSignificance: 'Bestows ancestral names and protection upon the newborn baby.',
-    audioUrl: 'https://www.youtube.com/watch?v=8qW1qQY_V1c',
+    culturalOccasion: 'Funeral',
+    description: 'Solemn Luo ritual procession performed during elder funeral ceremonies.',
+    culturalSignificance: 'Drives away evil spirits and honors the memory of deceased community leaders.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_fun_1',
+    imageUrl: '/images/instruments/aerophone.png',
   },
   {
-    title: 'Dodo Birth Chant and Clan Welcome',
+    title: 'Eshiriri Dirge (Farewell to an Elder)',
     itemType: 'Folk Song',
-    tribeOfOrigin: 'Luo',
-    culturalOccasion: 'Birth and Naming Ceremonies',
-    description: 'Traditional Dodo style chant celebrating the safe arrival of a newborn into the clan.',
-    culturalSignificance: 'Exalts maternal strength and reinforces clan lineage ties.',
-    audioUrl: 'https://www.youtube.com/watch?v=zJg9vL2jR9Y',
+    tribeOfOrigin: 'Luhya',
+    culturalOccasion: 'Funeral',
+    description: 'Traditional funeral dirge accompanied by single-stringed fiddle melodies.',
+    culturalSignificance: 'Provides emotional solace and honors tribal elders upon their passing.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_fun_2',
+    imageUrl: '/images/instruments/aerophone.png',
   },
   {
-    title: 'Ngurario Customary Marriage Ceremony Song',
-    itemType: 'Folk Song',
-    tribeOfOrigin: 'Kikuyu',
-    culturalOccasion: 'Weddings (Ngurario)',
-    description: 'Final traditional marriage rite song accompanied by the cutting of the shoulder meat (Kiande).',
-    culturalSignificance: 'Seals the marriage covenant permanently under Kikuyu customary law.',
-    audioUrl: 'https://www.youtube.com/watch?v=yW6bYk9jP8c',
-  },
-  {
-    title: 'Ruracio Processional Folk Song',
+    title: 'Muthirigu (Passage to Manhood)',
     itemType: 'Folk Song',
     tribeOfOrigin: 'Kikuyu',
-    culturalOccasion: 'Weddings and Dowry (Ruracio)',
-    description: 'Negotiation and welcoming folk song sung when the groom’s family visits the bride’s home.',
-    culturalSignificance: 'Fosters friendship, negotiation, and kinship between families.',
-    audioUrl: 'https://www.youtube.com/watch?v=gT8vH7yB2eM',
+    culturalOccasion: 'Circumcision',
+    description: 'Historic Kikuyu initiation song sung by candidates during rites of passage.',
+    culturalSignificance: 'Instills bravery, endurance, and cultural pride during adulthood initiation.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_cir_1',
+    imageUrl: '/images/instruments/aerophone.png',
+  },
+  {
+    title: 'Khukeba (The Bravery Dance)',
+    itemType: 'Folk Song',
+    tribeOfOrigin: 'Luhya',
+    culturalOccasion: 'Circumcision',
+    description: 'High-energy processional dance performed during initiation ceremonies.',
+    culturalSignificance: 'Announces readiness of young initiates for mature societal roles.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_cir_2',
+    imageUrl: '/images/instruments/aerophone.png',
+  },
+  {
+    title: 'Mwana Wa Mberi (Firstborn Lullaby)',
+    itemType: 'Folk Song',
+    tribeOfOrigin: 'Pokomo',
+    culturalOccasion: 'Birth',
+    description: 'Pokomo riverine lullaby celebrating the arrival of a firstborn child.',
+    culturalSignificance: 'Invokes protection and health for newborns.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_bir_1',
+    imageUrl: '/images/instruments/aerophone.png',
+  },
+  {
+    title: 'Engato Y\'Omwana (Welcoming the Child)',
+    itemType: 'Folk Song',
+    tribeOfOrigin: 'Kisii',
+    culturalOccasion: 'Birth',
+    description: 'Joyous Kisii naming song performed by grandmothers and mothers.',
+    culturalSignificance: 'Welcomes the infant into the clan lineage.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_bir_2',
+    imageUrl: '/images/instruments/aerophone.png',
+  },
+  {
+    title: 'Mucung\'wa (Feast of Plenty)',
+    itemType: 'Folk Song',
+    tribeOfOrigin: 'Kikuyu',
+    culturalOccasion: 'Harvest',
+    description: 'Celebratory Kikuyu post-harvest dance honoring agricultural bounty.',
+    culturalSignificance: 'Expresses gratitude to the Almighty for fruitful crops.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_har_1',
+    imageUrl: '/images/instruments/aerophone.png',
+  },
+  {
+    title: 'Mwethya (Working the Fields Together)',
+    itemType: 'Folk Song',
+    tribeOfOrigin: 'Kamba',
+    culturalOccasion: 'Harvest',
+    description: 'Communal Kamba work song performed during communal harvesting.',
+    culturalSignificance: 'Fosters team spirit and communal labor in farming.',
+    audioUrl: 'https://www.youtube.com/watch?v=placeholder_har_2',
+    imageUrl: '/images/instruments/aerophone.png',
   },
 
   // --- 1. CHORDOPHONES (STRINGED INSTRUMENTS) ---
@@ -758,6 +794,36 @@ const archiveItemsData = [
   },
 ];
 
+const User = require('./models/User');
+
+// --- DEFAULT SEEDED USER ACCOUNTS ---
+const defaultUsersData = [
+  {
+    name: 'Admin Administrator',
+    email: 'admin@sautismart.co.ke',
+    password: 'Admin@Sauti2026',
+    role: 'admin',
+  },
+  {
+    name: 'Dr. Stanley Githinji',
+    email: 'githinji.admin@sautismart.co.ke',
+    password: 'Githinji@2026',
+    role: 'admin',
+  },
+  {
+    name: 'Khaemba Daisy',
+    email: 'daisy.admin@sautismart.co.ke',
+    password: 'Daisy@2026',
+    role: 'admin',
+  },
+  {
+    name: 'CBC Student Learner',
+    email: 'student@sautismart.co.ke',
+    password: 'Student@2026',
+    role: 'student',
+  },
+];
+
 // --- SEEDER FUNCTION ---
 
 const seedDatabase = async () => {
@@ -766,10 +832,11 @@ const seedDatabase = async () => {
     await mongoose.connect(MONGO_URI);
     console.log('Connected successfully to MongoDB.');
 
-    console.log('Clearing existing collections (SetPiece, TheoryModule, ArchiveItem)...');
+    console.log('Clearing existing collections (SetPiece, TheoryModule, ArchiveItem, User)...');
     await SetPiece.deleteMany({});
     await TheoryModule.deleteMany({});
     await ArchiveItem.deleteMany({});
+    await User.deleteMany({});
     console.log('Collections cleared.');
 
     console.log(`Inserting ${setPiecesData.length} Set Pieces...`);
@@ -784,16 +851,23 @@ const seedDatabase = async () => {
     const insertedArchive = await ArchiveItem.insertMany(archiveItemsData);
     console.log(`Successfully inserted ${insertedArchive.length} Cultural Archive Items.`);
 
+    console.log(`Inserting ${defaultUsersData.length} Default User Accounts...`);
+    for (const userData of defaultUsersData) {
+      await User.create(userData);
+    }
+    console.log(`Successfully created ${defaultUsersData.length} User Accounts.`);
+
     console.log('\n========================================');
-    console.log('🎉 SAUTISMART DATABASE SEEDED SUCCESSFULLY!');
+    console.log('SAUTISMART DATABASE SEEDED SUCCESSFULLY');
     console.log(`- Set Pieces: ${insertedSetPieces.length}`);
     console.log(`- Theory Modules: ${insertedTheory.length}`);
     console.log(`- Cultural Archive Items: ${insertedArchive.length}`);
+    console.log(`- Users Seeded: ${defaultUsersData.length}`);
     console.log('========================================\n');
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error('Error seeding database:', error);
     process.exit(1);
   }
 };
