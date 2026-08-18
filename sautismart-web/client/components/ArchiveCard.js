@@ -5,10 +5,82 @@ import { useRef, useState } from 'react';
  * Displays a single cultural archive entry (song or indigenous instrument),
  * rendering its metadata, image placeholder, tags, and inline audio playback.
  */
+function getInstrumentImage(item) {
+  if (item.imageUrl && item.imageUrl.startsWith('/images/instruments/')) {
+    return item.imageUrl;
+  }
+  const family = (item.instrumentFamily || '').toLowerCase();
+  const title = (item.title || '').toLowerCase();
+  const type = (item.itemType || '').toLowerCase();
+
+  // 1st Image: Chordophone (String / Lyre / Bow / Fiddle)
+  if (
+    family.includes('string') ||
+    family.includes('chordophone') ||
+    title.includes('nyatiti') ||
+    title.includes('wandindi') ||
+    title.includes('litungu') ||
+    title.includes('obokano') ||
+    title.includes('fiddle') ||
+    title.includes('lyre') ||
+    title.includes('bow') ||
+    title.includes('zither')
+  ) {
+    return '/images/instruments/chordophone.png';
+  }
+  // 2nd Image: Membranophone (Drums / Percussive Hide Drums)
+  if (
+    family.includes('membranophone') ||
+    family.includes('drum') ||
+    title.includes('drum') ||
+    title.includes('isukuti') ||
+    title.includes('bul') ||
+    title.includes('kithembe') ||
+    title.includes('embegete') ||
+    title.includes('ngoma')
+  ) {
+    return '/images/instruments/membranophone.png';
+  }
+  // 3rd Image: Idiophone (Kalimba / Shakers / Kayamba / Bells / Thumb Piano)
+  if (
+    family.includes('idiophone') ||
+    title.includes('kayamba') ||
+    title.includes('marimba') ||
+    title.includes('gara') ||
+    title.includes('bell') ||
+    title.includes('kalimba') ||
+    title.includes('chinyimba') ||
+    title.includes('rattle')
+  ) {
+    return '/images/instruments/idiophone.png';
+  }
+  // 4th Image: Aerophone (Wind / Flute / Horn / Siwa / Trumpet)
+  if (
+    family.includes('wind') ||
+    family.includes('aerophone') ||
+    title.includes('flute') ||
+    title.includes('horn') ||
+    title.includes('chivoti') ||
+    title.includes('siwa') ||
+    title.includes('muturiru') ||
+    title.includes('biringi') ||
+    title.includes('aluti')
+  ) {
+    return '/images/instruments/aerophone.png';
+  }
+
+  // Fallback default based on itemType
+  if (type.includes('song')) {
+    return '/images/instruments/aerophone.png';
+  }
+  return '/images/instruments/chordophone.png';
+}
+
 export default function ArchiveCard({ item }) {
   // DOM reference for controlling the HTML5 audio element
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const displayImageUrl = getInstrumentImage(item);
 
   // Toggle audio playback state
   const togglePlayback = () => {
@@ -26,22 +98,23 @@ export default function ArchiveCard({ item }) {
   };
 
   return (
-    <div className="card h-100 shadow-sm border-0">
+    <div className="card h-100 shadow-sm border-0 overflow-hidden">
       <div
-        className="card-img-top d-flex align-items-center justify-content-center"
+        className="card-img-top d-flex align-items-center justify-content-center position-relative"
         style={{
-          height: '160px',
+          height: '200px',
           backgroundColor: '#0F7173',
-          backgroundImage: item.imageUrl ? `url(${item.imageUrl})` : 'none',
+          backgroundImage: `url(${displayImageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        {!item.imageUrl && (
-          <span className="fs-1" style={{ color: '#FFFFFF' }} aria-hidden="true">
-            &#9835;
-          </span>
-        )}
+        <span
+          className="position-absolute bottom-0 end-0 badge m-2"
+          style={{ backgroundColor: 'rgba(15, 113, 115, 0.95)', color: '#FFFFFF' }}
+        >
+          {item.instrumentFamily || item.itemType}
+        </span>
       </div>
       <div className="card-body d-flex flex-column">
         <div className="d-flex justify-content-between align-items-start mb-2">

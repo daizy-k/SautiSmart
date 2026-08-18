@@ -8,6 +8,7 @@ export default function LoginPage() {
   const { login, signup, user } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -177,36 +178,28 @@ export default function LoginPage() {
                     <label htmlFor="password" className="form-label fw-semibold small" style={{ color: '#0C0C0C' }}>
                       Password
                     </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      placeholder="Minimum 6 characters"
-                      value={formData.password}
-                      onChange={handleChange}
-                      minLength={6}
-                      required
-                    />
-                  </div>
-
-                  {!isLogin && (
-                    <div className="mb-4">
-                      <label htmlFor="role" className="form-label fw-semibold small" style={{ color: '#0C0C0C' }}>
-                        Account Role
-                      </label>
-                      <select
-                        id="role"
-                        name="role"
-                        className="form-select"
-                        value={formData.role}
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        className="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Minimum 6 characters"
+                        value={formData.password}
                         onChange={handleChange}
+                        minLength={6}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
-                        <option value="student">Student (Read-only learner access)</option>
-                        <option value="admin">Admin (Content Manager)</option>
-                      </select>
+                        {showPassword ? '🙈 Hide' : '👁️ Show'}
+                      </button>
                     </div>
-                  )}
+                  </div>
 
                   <button
                     type="submit"
