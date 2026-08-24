@@ -71,7 +71,7 @@ function getInstrumentImage(item) {
 
   // Fallback default based on itemType
   if (type.includes('song')) {
-    return '/images/instruments/aerophone.png';
+    return '/images/instruments/folksongs.png';
   }
   return '/images/instruments/chordophone.png';
 }
