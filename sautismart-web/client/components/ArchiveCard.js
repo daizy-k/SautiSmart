@@ -76,25 +76,104 @@ function getInstrumentImage(item) {
   return '/images/instruments/chordophone.png';
 }
 
+function getYouTubeEmbedId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  return match ? match[1] : null;
+}
+
+function playSyntheticInstrumentSound(item) {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    const family = (item.instrumentFamily || '').toLowerCase();
+    const title = (item.title || '').toLowerCase();
+
+    if (family.includes('string') || title.includes('nyatiti') || title.includes('wandindi') || title.includes('litungu')) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(293.66, now);
+      osc.frequency.exponentialRampToValueAtTime(146.83, now + 1.2);
+      gain.gain.setValueAtTime(0.6, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1.2);
+    } else if (family.includes('membranophone') || title.includes('drum') || title.includes('isukuti')) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(130, now);
+      osc.frequency.exponentialRampToValueAtTime(45, now + 0.5);
+      gain.gain.setValueAtTime(0.8, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } else if (family.includes('idiophone') || title.includes('kalimba') || title.includes('kayamba') || title.includes('marimba')) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, now);
+      gain.gain.setValueAtTime(0.7, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.8);
+    } else {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.linearRampToValueAtTime(587.33, now + 0.5);
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1.0);
+    }
+  } catch (e) {
+    console.warn('Synthetic audio error:', e);
+  }
+}
+
 export default function ArchiveCard({ item }) {
-  // DOM reference for controlling the HTML5 audio element
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showEmbed, setShowEmbed] = useState(false);
   const displayImageUrl = getInstrumentImage(item);
+  const youtubeId = getYouTubeEmbedId(item.audioUrl);
 
-  // Toggle audio playback state
   const togglePlayback = () => {
-    const audioEl = audioRef.current;
-    if (!audioEl) {
+    if (youtubeId) {
+      setShowEmbed(!showEmbed);
       return;
     }
-    if (isPlaying) {
-      audioEl.pause();
-      setIsPlaying(false);
-    } else {
-      audioEl.play();
-      setIsPlaying(true);
+
+    if (item.audioUrl && (item.audioUrl.endsWith('.mp3') || item.audioUrl.endsWith('.wav'))) {
+      const audioEl = audioRef.current;
+      if (!audioEl) return;
+      if (isPlaying) {
+        audioEl.pause();
+        setIsPlaying(false);
+      } else {
+        audioEl.play().catch(() => playSyntheticInstrumentSound(item));
+        setIsPlaying(true);
+      }
+      return;
     }
+
+    // Fallback: Play synthetic audio acoustic preview for traditional instruments
+    playSyntheticInstrumentSound(item);
+    setIsPlaying(true);
+    setTimeout(() => setIsPlaying(false), 1200);
   };
 
   return (
@@ -153,21 +232,36 @@ export default function ArchiveCard({ item }) {
           </div>
         )}
 
-        {item.audioUrl && (
-          <div className="d-flex align-items-center gap-2 mt-2">
-            <button
-              type="button"
-              className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center"
-              style={{ backgroundColor: '#69DC9E', color: '#0C0C0C', width: '40px', height: '40px' }}
-              onClick={togglePlayback}
-              aria-label={isPlaying ? `Pause ${item.title}` : `Play ${item.title}`}
-            >
-              {isPlaying ? '⏸' : '▶'}
-            </button>
-            <audio ref={audioRef} src={item.audioUrl} onEnded={() => setIsPlaying(false)} preload="none" />
-            <span className="small text-secondary">Listen to a sample</span>
+        {/* Embedded YouTube Player */}
+        {showEmbed && youtubeId && (
+          <div className="ratio ratio-16x9 mb-3 rounded overflow-hidden">
+            <iframe
+              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
+              title={item.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         )}
+
+        {/* Playable Control Bar */}
+        <div className="d-flex align-items-center gap-2 mt-2 pt-2 border-top">
+          <button
+            type="button"
+            className="btn btn-sm rounded-pill d-flex align-items-center gap-2 px-3 fw-bold"
+            style={{ backgroundColor: '#69DC9E', color: '#0C0C0C', border: 'none' }}
+            onClick={togglePlayback}
+            aria-label={isPlaying || showEmbed ? `Stop ${item.title}` : `Play ${item.title}`}
+          >
+            <span>{isPlaying || showEmbed ? '⏸ Pause / Hide' : '▶ Play Recording'}</span>
+          </button>
+          {item.audioUrl && (item.audioUrl.endsWith('.mp3') || item.audioUrl.endsWith('.wav')) && (
+            <audio ref={audioRef} src={item.audioUrl} onEnded={() => setIsPlaying(false)} preload="none" />
+          )}
+          <span className="small text-secondary ms-auto">
+            {youtubeId ? 'Video / Audio Link' : item.itemType === 'Folk Song' ? 'Folk Audio' : 'Acoustic Sample'}
+          </span>
+        </div>
       </div>
     </div>
   );
