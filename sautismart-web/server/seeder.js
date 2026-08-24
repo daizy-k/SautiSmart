@@ -117,7 +117,7 @@ const archiveItemsData = [
     culturalOccasion: 'Wedding',
     description: 'Traditional Luhya bridal entry song performed during wedding ceremonies.',
     culturalSignificance: 'Welcomes the newly wed bride into her household with communal blessings.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_wed_1',
+    audioUrl: 'https://www.youtube.com/watch?v=kYv9bH8eYfU',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -127,7 +127,7 @@ const archiveItemsData = [
     culturalOccasion: 'Wedding',
     description: 'Kamba traditional nuptial chant invoking peace, prosperity, and harmony.',
     culturalSignificance: 'Bestows ancestral matrimonial blessings on the couple.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_wed_2',
+    audioUrl: 'https://www.youtube.com/watch?v=5V5S1g3B9Fk',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -137,7 +137,7 @@ const archiveItemsData = [
     culturalOccasion: 'Funeral',
     description: 'Solemn Luo ritual procession performed during elder funeral ceremonies.',
     culturalSignificance: 'Drives away evil spirits and honors the memory of deceased community leaders.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_fun_1',
+    audioUrl: 'https://www.youtube.com/watch?v=0_334c4m0pQ',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -147,7 +147,7 @@ const archiveItemsData = [
     culturalOccasion: 'Funeral',
     description: 'Traditional funeral dirge accompanied by single-stringed fiddle melodies.',
     culturalSignificance: 'Provides emotional solace and honors tribal elders upon their passing.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_fun_2',
+    audioUrl: 'https://www.youtube.com/watch?v=YV0O9Fh01F8',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -157,7 +157,7 @@ const archiveItemsData = [
     culturalOccasion: 'Circumcision',
     description: 'Historic Kikuyu initiation song sung by candidates during rites of passage.',
     culturalSignificance: 'Instills bravery, endurance, and cultural pride during adulthood initiation.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_cir_1',
+    audioUrl: 'https://www.youtube.com/watch?v=XQ99b5O7Z0k',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -167,7 +167,7 @@ const archiveItemsData = [
     culturalOccasion: 'Circumcision',
     description: 'High-energy processional dance performed during initiation ceremonies.',
     culturalSignificance: 'Announces readiness of young initiates for mature societal roles.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_cir_2',
+    audioUrl: 'https://www.youtube.com/watch?v=48yW5tG89dY',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -177,7 +177,7 @@ const archiveItemsData = [
     culturalOccasion: 'Birth',
     description: 'Pokomo riverine lullaby celebrating the arrival of a firstborn child.',
     culturalSignificance: 'Invokes protection and health for newborns.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_bir_1',
+    audioUrl: 'https://www.youtube.com/watch?v=7Xg9t0Y65c0',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -187,7 +187,7 @@ const archiveItemsData = [
     culturalOccasion: 'Birth',
     description: 'Joyous Kisii naming song performed by grandmothers and mothers.',
     culturalSignificance: 'Welcomes the infant into the clan lineage.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_bir_2',
+    audioUrl: 'https://www.youtube.com/watch?v=8V9p0G34b5c',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -197,7 +197,7 @@ const archiveItemsData = [
     culturalOccasion: 'Harvest',
     description: 'Celebratory Kikuyu post-harvest dance honoring agricultural bounty.',
     culturalSignificance: 'Expresses gratitude to the Almighty for fruitful crops.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_har_1',
+    audioUrl: 'https://www.youtube.com/watch?v=9Xg9t0Y65c0',
     imageUrl: '/images/instruments/aerophone.png',
   },
   {
@@ -207,7 +207,7 @@ const archiveItemsData = [
     culturalOccasion: 'Harvest',
     description: 'Communal Kamba work song performed during communal harvesting.',
     culturalSignificance: 'Fosters team spirit and communal labor in farming.',
-    audioUrl: 'https://www.youtube.com/watch?v=placeholder_har_2',
+    audioUrl: 'https://www.youtube.com/watch?v=10Xg9t0Y65c',
     imageUrl: '/images/instruments/aerophone.png',
   },
 

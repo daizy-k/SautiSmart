@@ -244,23 +244,34 @@ export default function ArchiveCard({ item }) {
           </div>
         )}
 
-        {/* Playable Control Bar */}
-        <div className="d-flex align-items-center gap-2 mt-2 pt-2 border-top">
+        {/* Playable Control Bar & YouTube Link */}
+        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2 pt-2 border-top">
           <button
             type="button"
             className="btn btn-sm rounded-pill d-flex align-items-center gap-2 px-3 fw-bold"
             style={{ backgroundColor: '#69DC9E', color: '#0C0C0C', border: 'none' }}
             onClick={togglePlayback}
-            aria-label={isPlaying || showEmbed ? `Stop ${item.title}` : `Play ${item.title}`}
+            aria-label={isPlaying ? `Pause ${item.title}` : `Play ${item.title}`}
           >
-            <span>{isPlaying || showEmbed ? '⏸ Pause / Hide' : '▶ Play Recording'}</span>
+            <span>{isPlaying ? '⏸ Playing Sample...' : '▶ Play Audio Sample'}</span>
           </button>
+
+          {item.audioUrl && (item.audioUrl.includes('youtube.com') || item.audioUrl.includes('youtu.be')) && (
+            <a
+              href={item.audioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm rounded-pill fw-bold text-white d-inline-flex align-items-center gap-1 text-decoration-none"
+              style={{ backgroundColor: '#FF0000', borderColor: '#FF0000' }}
+              title="Open YouTube Link in New Tab"
+            >
+              <span>Watch on YouTube ↗</span>
+            </a>
+          )}
+
           {item.audioUrl && (item.audioUrl.endsWith('.mp3') || item.audioUrl.endsWith('.wav')) && (
             <audio ref={audioRef} src={item.audioUrl} onEnded={() => setIsPlaying(false)} preload="none" />
           )}
-          <span className="small text-secondary ms-auto">
-            {youtubeId ? 'Video / Audio Link' : item.itemType === 'Folk Song' ? 'Folk Audio' : 'Acoustic Sample'}
-          </span>
         </div>
       </div>
     </div>
