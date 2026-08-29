@@ -638,54 +638,90 @@ export default function AdminDashboard() {
                         rows="3"
                         value={setPieceForm.description}
                         onChange={(e) => setSetPieceForm({ ...setPieceForm, description: e.target.value })}
-              <div className="modal-body">
-                <form onSubmit={handleAddSetPiece}>
-                  <div className="mb-3">
-                    <label htmlFor="spTitle" className="form-label small fw-bold">Title</label>
-                    <input type="text" className="form-control" id="spTitle" value={setPieceForm.title} onChange={(e) => setSetPieceForm({ ...setPieceForm, title: e.target.value })} required />
-                  </div>
-                  <div className="row g-2 mb-3">
-                    <div className="col-md-6">
-                      <label htmlFor="spComposer" className="form-label small fw-bold">Composer</label>
-                      <input type="text" className="form-control" id="spComposer" value={setPieceForm.composer} onChange={(e) => setSetPieceForm({ ...setPieceForm, composer: e.target.value })} />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="spGrade" className="form-label small fw-bold">Grade Level</label>
-                      <select className="form-select" id="spGrade" value={setPieceForm.gradeLevel} onChange={(e) => setSetPieceForm({ ...setPieceForm, gradeLevel: e.target.value })}>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
-                        <option value="Grade 7">Grade 7</option>
-                        <option value="Grade 8">Grade 8</option>
-                        <option value="Grade 9">Grade 9</option>
-                      </select>
+                        placeholder="Syllabus notes and performance guidelines..."
+                      />
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="spCategory" className="form-label small fw-bold">Category</label>
-                    <input type="text" className="form-control" id="spCategory" value={setPieceForm.category} onChange={(e) => setSetPieceForm({ ...setPieceForm, category: e.target.value })} />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="spAudio" className="form-label small fw-bold">Audio URL (.mp3)</label>
-                    <input type="text" className="form-control" id="spAudio" value={setPieceForm.audioURL} onChange={(e) => setSetPieceForm({ ...setPieceForm, audioURL: e.target.value })} placeholder="https://..." />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="spDesc" className="form-label small fw-bold">Description</label>
-                    <textarea className="form-control" id="spDesc" rows="3" value={setPieceForm.description} onChange={(e) => setSetPieceForm({ ...setPieceForm, description: e.target.value })} />
-                  </div>
-                  <div className="d-flex justify-content-end gap-2">
-                    <button type="button" className="btn btn-secondary" onClick={() => setShowSetPieceModal(false)}>Cancel</button>
-                    <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F7173' }}>Save Set Piece</button>
-                  </div>
-                </form>
-              </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowSetPieceModal(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn text-white fw-bold" style={{ backgroundColor: '#0F7173' }}>
+                    Save Set Piece
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
 
-      {/* Archive Modal */}
+      {/* FORM MODAL 2: ADD CULTURAL ARCHIVE ITEM */}
       {showArchiveModal && (
+        <div className="modal d-block tab-modal" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content border-0 shadow">
+              <div className="modal-header text-dark" style={{ backgroundColor: '#E59F71' }}>
+                <h5 className="modal-title fw-bold">Add Cultural Archive Item</h5>
+                <button type="button" className="btn-close" onClick={() => setShowArchiveModal(false)} />
+              </div>
+              <form onSubmit={handleAddArchiveItem}>
+                <div className="modal-body">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold small">Item Name / Title</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        value={archiveForm.itemName}
+                        onChange={(e) => setArchiveForm({ ...archiveForm, itemName: e.target.value })}
+                        placeholder="e.g. Mwanani or Isukuti"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold small">Category (Item Type)</label>
+                      <select
+                        className="form-select"
+                        value={archiveForm.category}
+                        onChange={(e) => setArchiveForm({ ...archiveForm, category: e.target.value })}
+                      >
+                        <option>Folk Song</option>
+                        <option>Indigenous Instrument</option>
+                      </select>
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold small">Tribe of Origin</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        value={archiveForm.tribeOfOrigin}
+                        onChange={(e) => setArchiveForm({ ...archiveForm, tribeOfOrigin: e.target.value })}
+                        placeholder="e.g. Luhya, Kikuyu, Luo, Giriama"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-semibold small">Cultural Occasion</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        value={archiveForm.culturalOccasion}
+                        onChange={(e) => setArchiveForm({ ...archiveForm, culturalOccasion: e.target.value })}
+                        placeholder="e.g. Wedding, Harvest, Circumcision"
+                      />
+                    </div>
+                    <div className="col-12">
+                      <label className="form-label fw-semibold small">Media URL (Audio / Image Link)</label>
+                      <input
+                        type="url"
+                        className="form-control"
+                        value={archiveForm.mediaURL}
+                        onChange={(e) => setArchiveForm({ ...archiveForm, mediaURL: e.target.value })}
+                        placeholder="https://example.com/media/sample.mp3"
+                      />
                     </div>
                     <div className="col-12">
                       <label className="form-label fw-semibold small">Description</label>
