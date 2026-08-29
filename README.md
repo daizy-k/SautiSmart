@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 Project Overview & Objectives
+##  Project Overview & Objectives
 
 **SautiSmart** is an interactive, full-stack digital music education platform designed specifically for the Kenyan Competency-Based Curriculum (CBC) (Grades 4 through 9). The application addresses critical resource constraints in music education across Kenyan primary and junior secondary schools by replacing static audio files and unavailable physical instruments with:
 
@@ -18,14 +18,14 @@
 
 ---
 
-## 🎯 Sustainable Development Goals (SDGs) Alignment
+##  Sustainable Development Goals (SDGs) Alignment
 
 - **SDG 4: Quality Education** — Provides equal access to high-quality music learning tools and structured CBC syllabus resources for students regardless of school infrastructure.
 - **SDG 11: Sustainable Cities & Communities (Target 11.4)** — Strengthens efforts to protect and safeguard Kenya’s intangible cultural heritage by digitizing indigenous music, oral histories, and folk traditions.
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```
   ┌───────────────────────────────────────────────────────────┐
@@ -66,7 +66,7 @@
 
 ---
 
-## 🚀 How to Run the Application
+##  How to Run the Application
 
 ### 1. Prerequisites
 - Node.js (v18 or higher)
@@ -174,7 +174,7 @@ router.get('/stats', async (req, res) => {
 
 ---
 
-## 👤 Author & Acknowledgments
+##  Author & Acknowledgments
 
 - **Student**: Khaemba Daisy (USIU-Africa)
 - **Course**: APT 4900 A Senior Project
