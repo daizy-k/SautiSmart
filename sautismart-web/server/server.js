@@ -62,9 +62,11 @@ app.use((err, req, res, next) => {
 // Define server port from environment configuration (defaults to 5000)
 const PORT = process.env.PORT || 5000;
 
-// Start listening for incoming HTTP requests
-app.listen(PORT, () => {
-  console.log(`SautiSmart API server running on port ${PORT}`);
-});
+// Start listening for incoming HTTP requests when executed directly
+if (require.main === module || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`SautiSmart API server running on port ${PORT}`);
+  });
+}
 
 module.exports = app;

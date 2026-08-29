@@ -4,7 +4,9 @@ const nextConfig = {
   reactStrictMode: true,
   // Expose backend API URL to client bundle (overridden by client/.env.local if present)
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    NEXT_PUBLIC_API_URL:
+      process.env.NEXT_PUBLIC_API_URL ||
+      (process.env.VERCEL || process.env.VERCEL_URL ? '/api' : 'http://localhost:5000/api'),
   },
 };
 
